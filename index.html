@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,78 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habit Tracker</title>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
-    <script src="assets\sample.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets\sample.css">
 </head>
 <body>
-    <div id="current-date"></div> <!-- Display current date -->
-    <h1>Habit Tracker</h1>
+<div id="current-date"></div>
+<h1>Habit Tracker</h1>
 
-    <form id="habit-form">
-        <label for="habit-name">Habit Name:</label>
-        <input type="text" id="habit-name" required>
-        
-        <label for="habit-date">Date:</label>
-        <input type="date" id="habit-date" required>
-        
-        <button type="button" onclick="addHabit()">Log Habit</button>
-    </form>
+<form id="habit-form">
+    <label for="habit-name">Habit Name:</label>
+    <input type="text" id="habit-name" required>
 
-    <h2>Logged Habits</h2>
-    <ul id="habit-list">
-        <!-- Add habit entries -->
-    </ul>
+    <label for="habit-date">Date:</label>
+    <input type="date" id="habit-date" required>
 
-    <script>
-        // Function add a habit entry to the list
-        function addHabit() {
-            const habitName = document.getElementById("habit-name").value;
-            const habitDate = document.getElementById("habit-date").value;
-            const habitList = document.getElementById("habit-list");
+    <label for="city-name">City:</label>
+    <input type="text" id="city-name" required>
 
-            if (habitName && habitDate) {
-                // Create a Day.js instance for the current date
-                const currentDate = dayjs();
+    <button type="button" onclick="addHabit()">Log Habit</button>
+</form>
 
-                // Create a Day.js instance for the selected habit date
-                const selectedDate = dayjs(habitDate);
+<div id="weather-info"></div>
 
-                // Check if the selected date is in the future
-                if (selectedDate.isAfter(currentDate)) {
-                    alert("You cannot log habits in the future.");
-                } else {
-                    // Create a new list item
-                    const listItem = document.createElement("li");
-                    listItem.textContent = `Habit: ${habitName}, Date: ${habitDate}`;
+<h2>Logged Habits</h2>
+<ul id="habit-list">
 
-                    // Append the list item to the habit list
-                    habitList.appendChild(listItem);
-
-                    // Save the logged habit to local storage
-                    const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
-                    loggedHabits.push({ habitName, habitDate });
-                    localStorage.setItem("loggedHabits", JSON.stringify(loggedHabits));
-
-                    // Clear input fields
-                    document.getElementById("habit-name").value = "";
-                    document.getElementById("habit-date").value = "";
-                }
-            } else {
-                alert("Please enter both habit name and date.");
-            }
-        }
-
-        // Load logged habits from local storage
-        window.addEventListener("load", function() {
-            const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
-
-            const habitList = document.getElementById("habit-list");
-            loggedHabits.forEach(function(entry) {
-                const listItem = document.createElement("li");
-                listItem.textContent = `Habit: ${entry.habitName}, Date: ${entry.habitDate}`;
-                habitList.appendChild(listItem);
-            });
-        });
-    </script>
+</ul>
+<script src="./assets/sample.js"></script>
 </body>
 </html>
