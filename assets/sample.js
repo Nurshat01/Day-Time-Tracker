@@ -1,52 +1,3 @@
-
-// Function to create a habit entry
-function createHabit() {
-    const habitName = document.getElementById("habit-name").value;
-    const habitList = document.getElementById("habit-list");
-
-    if (habitName) {
-        // Check if a container already exists for this habit
-        let habitContainer = document.getElementById(habitName);
-        if (!habitContainer) {
-            // Create a new container for the habit
-            habitContainer = document.createElement("li");
-            habitContainer.id = habitName;
-            habitContainer.innerHTML = `<div class="habit-entry">
-                <h3>${habitName}</h3>
-                <ul class="logged-values"></ul>
-                <input type="number" placeholder="Enter value" id="logged-value-${habitName}">
-                <button type="button" onclick="logValue('${habitName}')">Log Value</button>
-            </div>`;
-            habitList.appendChild(habitContainer);
-        }
-
-        // No need to clear the input field
-    } else {
-        alert("Please enter a habit name.");
-    }
-}
-
-// Function to log numerical values for a habit
-function logValue(habitName) {
-    const loggedValueInput = document.getElementById(`logged-value-${habitName}`);
-    const loggedValue = loggedValueInput.value;
-    
-    if (loggedValue !== "") {
-        const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
-
-        const currentDate = new Date().toLocaleDateString();
-        const currentTime = new Date().toLocaleTimeString();
-        const logDate = `${currentDate} ${currentTime}`;
-
-        loggedHabits.push({ habitName, loggedValue, logDate });
-        localStorage.setItem("loggedHabits", JSON.stringify(loggedHabits));
-
-        createHabitEntry(habitName, loggedValue, logDate);
-        loggedValueInput.value = ""; // Clear the input after logging
-    }
-}
-
-// Function to clear all logged data
 function clearData() {
     if (confirm("Are you sure you want to clear all logged data?")) {
         localStorage.removeItem("loggedHabits");
@@ -55,39 +6,71 @@ function clearData() {
     }
 }
 
-// Load logged habits from local storage on page load
+function addHabit() {
+    const habitName = document.getElementById("habit-name").value;
+    const habitDate = document.getElementById("habit-date").value;
+    const city = document.getElementById("city-name").value;
+    const habitList = document.getElementById("habit-list");
+    const weatherInfo = document.getElementById("weather-info");
+
+    function tempConvert(temp) {
+        return ((temp - 273.15) * 1.8 + 32).toFixed(2)+"°F";
+      }
+
+    if (habitName && habitDate && city) {
+        const currentDate = dayjs();
+        const selectedDate = dayjs(habitDate);
+
+        if (selectedDate.isAfter(currentDate)) {
+            alert("You cannot log habits in the future.");
+        } else {
+
+            const apiKey = '3977bb5e1b61426933e83f3be4f8c778';
+            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+            fetch(weatherUrl)
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch weather data.");
+                }
+                return response.json();
+            })
+                .then(data => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Habit: ${habitName}, Date: ${habitDate}, Weather: ${data.weather[0].description}, Temperature: ${tempConvert(data.main.temp)}°F`;
+                habitList.appendChild(listItem);
+
+                // Save to local storage---------------------------------------
+                const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
+                loggedHabits.push({ habitName, habitDate, weather: data.weather[0].description, temperature: tempConvert(data.main.temp)});
+                localStorage.setItem("loggedHabits", JSON.stringify(loggedHabits));
+
+                //weather information ----------------------------------
+                weatherInfo.textContent = `Weather: ${data.weather[0].description}, Temperature: ${tempConvert(data.main.temp)}°F`;
+            })
+                .catch(error => {
+                console.error("Error fetching weather data:", error);
+                weatherInfo.textContent = "Failed to fetch weather data. Please try again later.";
+            });
+
+            // Clear input fields
+            document.getElementById("habit-name").value = "";
+            document.getElementById("habit-date").value = "";
+            document.getElementById("city-name").value = "";
+        }
+    } else {
+        alert("Please enter habit name, date, and city.");
+    }
+}
+
+// Load logged habits from local storage
 window.addEventListener("load", function() {
     const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
 
     const habitList = document.getElementById("habit-list");
     loggedHabits.forEach(function(entry) {
-        createHabitEntry(entry.habitName, entry.loggedValue, entry.logDate);
+        const listItem = document.createElement("li");
+        listItem.textContent = `Habit: ${entry.habitName}, Date: ${entry.habitDate}, Weather: ${entry.weather}, Temperature: ${entry.temperature}°F`;
+        habitList.appendChild(listItem);
     });
-
-    displayCurrentDate();
 });
-
-// Helper function to create a habit entry for logged values
-function createHabitEntry(habitName, loggedValue, logDate) {
-    const habitList = document.getElementById("habit-list");
-
-    let habitContainer = document.getElementById(habitName);
-    if (!habitContainer) {
-        habitContainer = document.createElement("li");
-        habitContainer.id = habitName;
-        habitContainer.innerHTML = `<div class="habit-entry">
-            <h3>${habitName}</h3>
-            <ul class="logged-values"></ul>
-        </div>`;
-        habitList.appendChild(habitContainer);
-    }
-
-    const listItem = document.createElement("li");
-    listItem.innerHTML = `<div class="logged-value">
-        <span class="logged-date">${logDate}</span>
-        <h4>${loggedValue}</h4>
-    </div>`;
-
-    const loggedValues = habitContainer.querySelector(".logged-values");
-    loggedValues.appendChild(listItem);
-}
