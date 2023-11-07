@@ -1,31 +1,95 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habit Tracker</title>
+    <title>Input Page</title>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets\sample.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body{
+            background-image:url(./assets/Images/44bf8b5a11f4cedff5c1c2778b0f7b9c.gif);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
 <body>
-    <div id="current-date"></div>
-    <h1>Habit Tracker</h1>
-    <button id="clear-data-button" onclick="clearData()">Clear Data</button>
-
-    <div id="create-habit-section">
-        <form id="habit-form">
-            <label for="habit-name">Habit Name:</label>
-            <input type="text" id="habit-name" required>
-            <button type="button" onclick="createHabit()">Create Habit</button>
-        </form>
+    <div class="navbar-fixed">
+        <nav class="blue">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="#" class="site-logo">Habbit Tracker</a>
+                    <a href="#" data-target="mobile-nav" class="sidenav-trigger">
+                        <i class="material-icons">menu</i>
+                    </a>
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                          <a href="./Form.html">Home</a>
+                        </li>
+                        <li>
+                            <a href="./Content.html">Habit Information</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <div class="card-panel">
+                    <h4>Record Your Habit</h4>
 
-    <h2>Logged Habits</h2>
-    <ul id="habit-list">
-        <!-- Add habit entries -->
-    </ul>
+                    <div class="input-field">
+                        <input type="text" placeholder="Name of habit.." id="habit-name" required>
+                        <label for="habit-name">Name of habit</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" placeholder="mm/dd/yyyy" id="habit-date" required>
+                        <label for="habit-date">Date:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" placeholder="" id="city-name" required>
+                        <label for="city-name">City:</label>
+                    </div>
+                    <a href="#" class="btn" onclick="addHabit()">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="current-date"></div>
+</div>
+<ul class="sidenav" id="mobile-nav">
+    <li>
+      <a href="#Home">Home</a>
+    </li>
+    <li>
+        <a href="#Content">Habbit Information</a>
+    </li>
+</ul>
+    <div class="container">
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <div class="card-panel">
+                    <div id="weather-info"></div>
 
-    <script src="assets\sample.js"></script>
+                    <a href="#" class="btn" onclick="clearData()">Clear Data</a>
+                    <h2>Logged Habits</h2>
+                    <ul id="habit-list">
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="./assets/sample.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+<script>
+    // Sidenav for mobile
+    var sideNav = document.querySelector('.sidenav');
+    M.Sidenav.init(sideNav, {});
+</script>
 </body>
 </html>
