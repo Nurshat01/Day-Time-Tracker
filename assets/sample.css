@@ -2,7 +2,7 @@
 /* Body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: lightgray;
     margin: 0;
     padding: 0;
 }
@@ -10,10 +10,14 @@ body {
 /* Page header styles */
 h1 {
     text-align: center;
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
-    margin: 0;
+    background-color: darkgreen;
+    color: beige;
+    padding: 20px; /* Increase the padding for a taller header */
+    margin: 0 auto; /* Center the header horizontally and don't span the entire page width */
+    width: 50%; /* Set a specific width for the header */
+    top: 0; /* Position the header at the top of the viewport */
+    left: 25%; /* Adjust the left position for centering */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a shadow to make it stand out */
 }
 
 /* Form styles */
@@ -21,9 +25,13 @@ h1 {
     text-align: center;
     margin: 20px;
     padding: 10px;
-    background-color: #fff;
+    background-color: lightgray;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#create-habit-section {
+    display: block;
 }
 
 label {
@@ -31,8 +39,7 @@ label {
     margin-top: 10px;
 }
 
-input[type="text"],
-input[type="date"] {
+input[type="text"] {
     width: 100%;
     padding: 5px;
     margin: 5px 0;
@@ -41,7 +48,7 @@ input[type="date"] {
 }
 
 button {
-    background-color: #007bff;
+    background-color: darkgreen;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -50,12 +57,12 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: black;
 }
 
 /* Logged habits list styles */
 h2 {
-    text-align: center;
+    text-align: left;
     margin: 20px 0;
 }
 
@@ -65,10 +72,10 @@ h2 {
 }
 
 #habit-list li {
-    background-color: #fff;
+    background-color: grey;
     padding: 10px;
     margin: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid gray;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
