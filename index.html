@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,30 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habit Tracker</title>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/sample.css">
 </head>
 <body>
-<div id="current-date"></div>
-<h1>Habit Tracker</h1>
+    <div id="current-date"></div>
+    <h1>Habit Tracker</h1>
+    <button id="clear-data-button" onclick="clearData()">Clear Data</button>
 
-<form id="habit-form">
-    <label for="habit-name">Habit Name:</label>
-    <input type="text" id="habit-name" required>
+    <div id="create-habit-section">
+        <form id="habit-form">
+            <label for="habit-name">Habit Name:</label>
+            <input type="text" id="habit-name" required>
+            <button type="button" onclick="createHabit()">Create Habit</button>
+        </form>
+    </div>
 
-    <label for="habit-date">Date:</label>
-    <input type="date" id="habit-date" required>
+    <h1>Random Quote</h1>
+    <button id="getQuoteButton">Get Quote</button>
+    <div id="quoteContainer">
+        <p id="quoteText"></p>
+        <p id="quoteAuthor"></p>
+    </div>
 
-    <label for="city-name">City:</label>
-    <input type="text" id="city-name" required>
+    <h2>Logged Habits</h2>
+    <ul id="habit-list">
+        <!-- Add habit entries -->
+    </ul>
 
-    <button type="button" onclick="addHabit()">Log Habit</button>
-</form>
-
-<div id="weather-info"></div>
-
-<h2>Logged Habits</h2>
-<ul id="habit-list">
-
-</ul>
-<script src="./assets/sample.js"></script>
+    <script src="assets/sample.js"></script>
 </body>
 </html>
