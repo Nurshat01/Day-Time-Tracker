@@ -1,64 +1,129 @@
-function addHabit() {
+
+// Function to create a habit entry
+function createHabit() {
     const habitName = document.getElementById("habit-name").value;
-    const habitDate = document.getElementById("habit-date").value;
-    const city = document.getElementById("city-name").value;
     const habitList = document.getElementById("habit-list");
-    const weatherInfo = document.getElementById("weather-info");
 
-    if (habitName && habitDate && city) {
-        const currentDate = dayjs();
-        const selectedDate = dayjs(habitDate);
+    if (habitName) {
+        // Check if a container already exists for this habit
+        let habitContainer = document.getElementById(habitName);
+        if (!habitContainer) {
+            // Create a new container for the habit
+            habitContainer = document.createElement("li");
+            habitContainer.id = habitName;
+            habitContainer.innerHTML = `<div class="habit-entry">
+                <h3>${habitName}</h3>
+                <ul class="logged-values"></ul>
+                <input type="number" placeholder="Enter value" id="logged-value-${habitName}">
+                <button type="button" onclick="logValue('${habitName}')">Log Value</button>
+            </div>`;
+            habitList.appendChild(habitContainer);
 
-        if (selectedDate.isAfter(currentDate)) {
-            alert("You cannot log habits in the future.");
-        } else {
-
-            const apiKey = 'nurshat key';
-            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-            fetch(weatherUrl)
-                .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to fetch weather data.");
-                }
-                return response.json();
-            })
-                .then(data => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `Habit: ${habitName}, Date: ${habitDate}, Weather: ${data.weather[0].description}, Temperature: ${data.main.temp}°C`;
-                habitList.appendChild(listItem);
-
-                // Save to local storage---------------------------------------
-                const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
-                loggedHabits.push({ habitName, habitDate, weather: data.weather[0].description, temperature: data.main.temp });
-                localStorage.setItem("loggedHabits", JSON.stringify(loggedHabits));
-
-                //weather information ----------------------------------
-                weatherInfo.textContent = `Weather: ${data.weather[0].description}, Temperature: ${data.main.temp}°C`;
-            })
-                .catch(error => {
-                console.error("Error fetching weather data:", error);
-                weatherInfo.textContent = "Failed to fetch weather data. Please try again later.";
-            });
-
-            // Clear input fields
-            document.getElementById("habit-name").value = "";
-            document.getElementById("habit-date").value = "";
-            document.getElementById("city-name").value = "";
+            // Store the habit name in local storage
+            const habitNames = JSON.parse(localStorage.getItem("habitNames")) || [];
+            habitNames.push(habitName);
+            localStorage.setItem("habitNames", JSON.stringify(habitNames));
         }
-    } else {
-        alert("Please enter habit name, date, and city.");
+    } 
+}
+
+// Function to log numerical values for a habit
+function logValue(habitName) {
+    const loggedValueInput = document.getElementById(`logged-value-${habitName}`);
+    const loggedValue = loggedValueInput.value;
+    
+    if (loggedValue !== "") {
+        const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
+
+        const currentDate = new Date().toLocaleDateString();
+        const currentTime = new Date().toLocaleTimeString();
+        const logDate = `${currentDate} ${currentTime}`;
+
+        loggedHabits.push({ habitName, loggedValue, logDate });
+        localStorage.setItem("loggedHabits", JSON.stringify(loggedHabits));
+
+        createHabitEntry(habitName, loggedValue, logDate);
+        loggedValueInput.value = ""; // Clear the input after logging
     }
 }
 
-// Load logged habits from local storage
-window.addEventListener("load", function() {
-    const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
+// Function to clear all logged data
+function clearData() {
+    if (confirm("Are you sure you want to clear all logged data?")) {
+        localStorage.removeItem("loggedHabits");
+        localStorage.removeItem("habitNames"); // Clear habit names
+        const habitList = document.getElementById("habit-list");
+        habitList.innerHTML = "";
+    }
+}
 
+// Load logged habits from local storage on page load
+window.addEventListener("load", function() {
+    const habitNames = JSON.parse(localStorage.getItem("habitNames")) || [];
     const habitList = document.getElementById("habit-list");
-    loggedHabits.forEach(function(entry) {
-        const listItem = document.createElement("li");
-        listItem.textContent = `Habit: ${entry.habitName}, Date: ${entry.habitDate}, Weather: ${entry.weather}, Temperature: ${entry.temperature}°C`;
-        habitList.appendChild(listItem);
+
+    // Recreate the input bars for each habit
+    habitNames.forEach(function(habitName) {
+        createHabit(habitName);
+        const loggedHabits = JSON.parse(localStorage.getItem("loggedHabits")) || [];
+        loggedHabits.forEach(function(entry) {
+            if (entry.habitName === habitName) {
+                createHabitEntry(habitName, entry.loggedValue, entry.logDate);
+            }
+        });
     });
+
+    displayCurrentDate();
 });
+
+// Get the current date using Day.js
+const currentDate = dayjs().format('YYYY-MM-DD');
+
+// Display the current date in the div
+document.getElementById('current-date').textContent = `Current Date: ${currentDate}`;
+
+// Helper function to create a habit entry for logged values
+function createHabitEntry(habitName, loggedValue, logDate) {
+    const habitList = document.getElementById("habit-list");
+
+    let habitContainer = document.getElementById(habitName);
+    if (!habitContainer) {
+        habitContainer = document.createElement("li");
+        habitContainer.id = habitName;
+        habitContainer.innerHTML = `<div class="habit-entry">
+            <h3>${habitName}</h3>
+            <ul class="logged-values"></ul>
+            <input type="number" placeholder="Enter value" id="logged-value-${habitName}">
+            <button type="button" onclick="logValue('${habitName}')">Log Value</button>
+        </div>`;
+        habitList.appendChild(habitContainer);
+    }
+
+    const listItem = document.createElement("li");
+    listItem.innerHTML = `<div class="logged-value">
+        <span class="logged-date">${logDate}</span>
+        <h4>${loggedValue}</h4>
+    </div>`;
+
+    const loggedValues = habitContainer.querySelector(".logged-values");
+    loggedValues.appendChild(listItem);
+}
+
+        // Function to fetch a random quote
+        function getQuote() {
+            fetch('https://quote-garden.onrender.com/api/v3/quotes/random')
+                .then(response => response.json())
+                .then(data => {
+                    const quote = data.data[0];
+                    const quoteText = quote.quoteText;
+                    const quoteAuthor = quote.quoteAuthor;
+
+                    document.getElementById('quoteText').textContent = `"${quoteText}"`;
+                    document.getElementById('quoteAuthor').textContent = `- ${quoteAuthor}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching quote:', error);
+                });
+        }
+
+        document.getElementById('getQuoteButton').addEventListener('click', getQuote);
