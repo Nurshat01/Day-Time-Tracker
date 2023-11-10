@@ -16,7 +16,7 @@ function addHabit() {
         return ((temp - 273.15) * 1.8 + 32).toFixed(2);
       }
 
-    if (habitName && habitDate && city) {
+    if (habitName && habitDate && city && habitTime) {
         const currentDate = dayjs();
         const selectedDate = dayjs(habitDate);
         const currentTime = dayjs('HH:MM');
@@ -47,7 +47,7 @@ function addHabit() {
                 localStorage.setItem("loggedHabits", JSON.stringify(loggedHabits));
 
                 //weather information ----------------------------------
-                weatherInfo.textContent = `Weather: ${data.weather[0].description}, Temperature: ${tempConvert(data.main.temp)}°F`;
+                weatherInfo.textContent = `Current Weather: ${data.weather[0].description}, Temperature: ${tempConvert(data.main.temp)}°F`;
             })
                 .catch(error => {
                 console.error("Error fetching weather data:", error);
@@ -91,7 +91,7 @@ window.addEventListener("load", function() {
     const habitList = document.getElementById("habit-list");
     loggedHabits.forEach(function(entry) {
         const listItem = document.createElement("li");
-        listItem.textContent = `Habit: ${entry.habitName}, Date: ${entry.habitDate}, Weather: ${entry.weather}, Temperature: ${entry.temperature}°F`;
+        listItem.textContent = `Habit: ${entry.habitName}, Time: ${entry.habitTime}, Date: ${entry.habitDate}, Weather: ${entry.weather}, Temperature: ${entry.temperature}°F`;
         habitList.appendChild(listItem);
     });
 });
