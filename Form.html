@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body{
+            background-image:url(./assets/Images/44bf8b5a11f4cedff5c1c2778b0f7b9c.gif);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar-fixed">
+        <nav class="blue">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="#" class="site-logo">Habbit Tracker</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <div class="card-panel">
+                    <h4>Record Your Habit</h4>
+
+                    <div class="input-field">
+                        <input type="text" placeholder="Name of habit.." id="habit-name" required>
+                        <label for="habit-name">Name of habit</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" class="datepicker" placeholder="mm/dd/yyyy" id="habit-date" required>
+                        <label for="habit-date">Date:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" class="Timepicker" placeholder="hh:mm" id="habit-time" required>
+                        <label for="habit-time">Time:</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" placeholder="" id="city-name" required>
+                        <label for="city-name">City:</label>
+                    </div>
+                    <a href="#" class="btn" onclick="addHabit()">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="current-date"></div>
+</div>
+    <div class="container">
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s8">
+                <div class="card-panel">
+                    <div id="weather-info"></div>
+
+                    <a href="#" class="btn" onclick="clearData()">Clear Data</a>
+                    <h5>Logged Habits & Motivational Quote</h5>
+    <button id="getQuoteButton" class="btn">Get Quote</button>
+    <div id="quoteContainer">
+        <p id="quoteText"></p>
+        <p id="quoteAuthor"></p>
+    </div>
+                    <ul id="habit-list" class="container">
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="./assets/sample.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+<script>
+    // Sidenav for mobile
+    const Calender = document.querySelector('.datepicker');
+    M.Datepicker.init(Calender,{});
+
+    const Timepicker = document.querySelector('.Timepicker');
+    M.Timepicker.init(Timepicker,{});
+</script>
+</body>
+</html>
